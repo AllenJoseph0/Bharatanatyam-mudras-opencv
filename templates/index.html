@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kathakali Mudra Detection</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            background-image: url('/static/kathakali.jpg');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        /* Header style */
+        h1 {
+            font-size: 3em;
+            font-weight: bold;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            background: -webkit-linear-gradient(#fff, #f09);
+            -webkit-background-clip: text;
+            color: transparent;
+            margin-bottom: 20px;
+            padding: 10px;
+        }
+
+        /* Video and Mudra Info Container */
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 80%;
+            max-width: 800px;
+        }
+
+        /* Video Frame Style */
+        .video-frame {
+            width: 100%;
+            border: 5px solid white;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Mudra Information Panel */
+        .mudra-info {
+            margin-top: 20px;
+            padding: 15px;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 10px;
+        }
+
+        .mudra-info h2 {
+            margin: 0;
+            color: #ffcc00;
+        }
+
+        .mudra-info p {
+            margin: 5px 0;
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Section -->
+    <h1>Kathakali Mudra Detection</h1>
+
+    <!-- Container for Video and Mudra Info -->
+    <div class="container">
+        <!-- Video Feed -->
+        <img id="video-feed" class="video-frame" src="{{ url_for('video_feed') }}" alt="Mudra Video Feed">
+
+        <!-- Mudra Information -->
+        <div class="mudra-info">
+            <h2>Detected Mudra</h2>
+            <p id="mudra-name">None</p>
+            <p id="mudra-description">Waiting for detection...</p>
+        </div>
+    </div>
+
+    <script>
+        function fetchMudraInfo() {
+            fetch('/mudra_info')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("mudra-name").textContent = data.mudra || "None";
+                    document.getElementById("mudra-description").textContent = data.description || "Waiting for detection...";
+                })
+                .catch(error => console.error('Error fetching mudra info:', error));
+        }
+
+        setInterval(fetchMudraInfo, 1000); // Update every second
+    </script>
+
+</body>
+</html>
